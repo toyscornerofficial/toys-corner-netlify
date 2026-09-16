@@ -1,0 +1,96 @@
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  background: #F8FAFC;
+}
+
+.app-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  transform: translateX(-100%);
+  transition: transform 0.25s ease;
+}
+
+.app-sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1030;
+}
+
+.app-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-content {
+  flex: 1;
+}
+
+.active-nav {
+  background: #EEF2FF;
+  color: #4F46E5 !important;
+  font-weight: 600;
+}
+
+/* Desktop: sidebar always visible, pushes content over */
+@media (min-width: 992px) {
+  .app-sidebar {
+    position: sticky;
+    transform: none;
+  }
+
+  .app-shell {
+    display: flex;
+  }
+}
+
+/* Print: hide everything except the invoice content itself */
+@media print {
+  .app-sidebar,
+  .app-topbar,
+  .sidebar-overlay {
+    display: none !important;
+  }
+
+  .app-content {
+    padding: 0 !important;
+  }
+
+  /* Thermal receipts print faint/blurry unless colors are forced to
+     render exactly as specified — some browsers lighten text by default
+     when printing to "save ink," which doesn't apply to thermal paper
+     but still washes out the contrast thermal printers need to read. */
+  .receipt-print,
+  .receipt-print * {
+    color: #000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+}
+
+/* Birthday blink — draws the cashier's eye to customers with a birthday
+   this month, without needing to read every row carefully. */
+@keyframes birthday-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.birthday-highlight {
+  color: #EF4444;
+  font-weight: 700;
+  animation: birthday-blink 1.2s ease-in-out infinite;
+}
